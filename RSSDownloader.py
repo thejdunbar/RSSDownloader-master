@@ -1,7 +1,8 @@
 """
-Author : Security In Five - https://securityinfive.com
-Contact: bblogger@protonmail.com
-Source: https://github.com/securityinfive/RSSDownloader
+Author : 
+Contact: thejdunbar+github@gmail.com
+PriorSource: https://github.com/securityinfive/RSSDownloader
+PriorSource: https://github.com/securityinfive/RSSDownloader
 
 Python script to download MP3 files from a podcast's RSS feed.
 Usage:
@@ -11,11 +12,7 @@ Usage:
         - Specific number within the range of the episodes/files in the feed.
         - Enter 0 and it will download all the files in the feed.
 
-I created this as I teach myself Python on the side. It started off as a simple downloader exercise and I grew
-it into a tool for me to archive the 700+ episodes of my podcast from my host. I then expanded it to try
-to be dynamic enough to work with any 'standard' RSS feed. Currently the RSS_Target and local_target_dir are hard coded.
 
-Future ideas to change this to where it could be scheduled for regular local downloads outside podcast player services.
 """
 import wget
 import feedparser
@@ -26,8 +23,22 @@ import os
 # RSS_Target = <https link to the RSS feed> "https://securityinfive.libsyn.com/rss"
 # local_target_dir = <local directory 'C:\foldername\target' format> "C:\Dev\PodcastArchive"
 
-RSS_Target = ""
-local_target_dir = ""
+
+#def RSSSuperDownloader(RSS_Target):
+    
+
+
+#RSS_Target = "https://files.manager-tools.com/files/public/feeds/career_tools_podcasts.xml"
+#local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/ManagerTools"
+
+
+
+
+
+
+RSS_Target = "https://files.manager-tools.com/files/private/feeds/fada28dae9/executive-tools-podcasts.xml"
+local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/ExecutiveTools"
+
 
 def get_input(rss_len):
     how_many_downloaded = ""
@@ -51,6 +62,7 @@ def get_input(rss_len):
     print("-------------------------------")
 
     return how_many_downloaded
+
 
 #Error checking for the input on How_Many and if How_Many is GT rss_length
 def validate_input(how_many_num, rss_len):
@@ -139,24 +151,12 @@ def Download_Files(target_dir, rss_feed, how_many_to_get):
         print("--- DOWNLOAD COMPLETE ---")
 # -----------------------------------------------------------------------
 
-# Get Started, Load the RSS and break out the feed and file count from the feed
-RSS_Feed = Get_Feed(RSS_Target)
-RSS_Feed_Items = RSS_Feed[0]
-RSS_Feed_Count = RSS_Feed[1]
+# Auto restart if "too many requests"
+# def RSS_restarter(numtries):
+#     for x in numtries:
+        
 
-# User input for number of files to download and make sure user input is clean
-is_valid = 0
-while is_valid == 0:
-    How_Many = get_input(RSS_Feed_Count)
-    is_valid = validate_input(How_Many, RSS_Feed_Count)
-else:
-    if int(How_Many) == 0:
-        File_Count = "All files to - "
-    elif int(How_Many) == 1:
-        File_Count = str(How_Many) + " file to - "
-    else:
-        File_Count = str(How_Many) + " files to - "
-    print("Downloading " + File_Count + local_target_dir)
-    Download_Files(local_target_dir, RSS_Feed_Items, How_Many)
+# Pass in list of URLS
 
-# End Of Line
+
+
