@@ -1,4 +1,7 @@
 # RSSDownloader
+
+Note: V2 of this allows the ability to pass in a list of RSS feed links and python to loop through that list
+
 Download all the current MP3s from your favorite podcast RSS feed.
 
 This little app started off as an exercise as I teach myself Python and grew into this. This will take an RSS feed of a podcast, ask you how many of the latest episodes you want to download locally and then download the mp3s. 
