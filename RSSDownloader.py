@@ -23,8 +23,8 @@ import os
 # RSS_Target = <https link to the RSS feed> "https://securityinfive.libsyn.com/rss"
 # local_target_dir = <local directory 'C:\foldername\target' format> "C:\Dev\PodcastArchive"
 
-RSS_Target = ""
-local_target_dir = ""
+RSS_Target = "https://files.manager-tools.com/files/public/feeds/politics.xml"
+local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/Podcasts/Politics"
 # RSS_Target = "https://files.manager-tools.com/files/private/feeds/fada28dae9/executive-tools-podcasts.xml"
 # local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/ExecutiveTools"
 
