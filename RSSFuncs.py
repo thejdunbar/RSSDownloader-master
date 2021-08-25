@@ -22,10 +22,10 @@ import os
 # RSS_Target = <https link to the RSS feed> "https://securityinfive.libsyn.com/rss"
 # local_target_dir = <local directory 'C:\foldername\target' format> "C:\Dev\PodcastArchive"
 
-RSS_Target = "https://files.manager-tools.com/files/public/feeds/hall-of-fame.xml"
-local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/Podcasts/Hall-of-fame"
-# RSS_Target = "https://files.manager-tools.com/files/private/feeds/fada28dae9/executive-tools-podcasts.xml"
-# local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/ExecutiveTools"
+#RSS_Target = "https://files.manager-tools.com/files/public/feeds/hall-of-fame.xml"
+#local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/Podcasts/Hall-of-fame"
+RSS_Target = ''
+local_target_dir = ''
 
 
 def get_input(rss_len):
@@ -48,7 +48,6 @@ def get_input(rss_len):
     print("-------------------------------")
     how_many_downloaded = input("How many recent episodes to download? Enter 0 for them all. - ")
     print("-------------------------------")
-
     return how_many_downloaded
 
 
@@ -65,7 +64,6 @@ def validate_input(how_many_num, rss_len):
     else:
         print("INPUT ERROR - Please Enter A Number Only.")
         validated = 0
-
     # Return a 1 or 0, guess which means what.
     return validated
 
@@ -75,7 +73,6 @@ def Get_Feed(rss_to_load):
     rss_feed_load = feedparser.parse(rss_to_load)
     rss_length = len(rss_feed_load.entries)
     print("Feed loaded.")
-    
     # Pass back a list
     return rss_feed_load, rss_length
 
@@ -115,7 +112,6 @@ def Download_Files(target_dir, rss_feed, how_many_to_get):
                 temp_mp3_link = temp_mp3_link.split("?")
                 # Grab the first item, the second will be the headers
                 temp_mp3_link = temp_mp3_link[0]
-
         # See if the mp3 file already exists in the target directory for download
         # If yes, skip it. If not, download it.
         if temp_mp3_link in current_files:
@@ -123,7 +119,6 @@ def Download_Files(target_dir, rss_feed, how_many_to_get):
         else:
             print("Downloading - " + str(temp_mp3_link))
             wget.download(mp3_link['href'], target_dir)
-
         # Iterate the entered count, break out when hit the entered file count
         # If How_Many is 0 the For loop will run to the end.
         if int(how_many_to_get) > 0:
@@ -133,31 +128,33 @@ def Download_Files(target_dir, rss_feed, how_many_to_get):
             else:
                 episode_count = episode_count + 1
     # --- END FOR ---
-
     # Kick out Complete message when done with all episodes when input is 0
     if int(how_many_to_get) == 0:
         print("--- DOWNLOAD COMPLETE ---")
         
 # -----------------------------------------------------------------------
 
-# Get Started, Load the RSS and break out the feed and file count from the feed
-RSS_Feed = Get_Feed(RSS_Target)
-RSS_Feed_Items = RSS_Feed[0]
-RSS_Feed_Count = RSS_Feed[1]
 
-# User input for number of files to download and make sure user input is clean
-is_valid = 0
-while is_valid == 0:
-    How_Many = get_input(RSS_Feed_Count)
-    is_valid = validate_input(How_Many, RSS_Feed_Count)
-else:
-    if int(How_Many) == 0:
-        File_Count = "All files to - "
-    elif int(How_Many) == 1:
-        File_Count = str(How_Many) + " file to - "
+def RSS_feed_func(RSS_Target2,local_target_dir):
+        
+    # Get Started, Load the RSS and break out the feed and file count from the feed
+    RSS_Feed = Get_Feed(RSS_Target2)
+    RSS_Feed_Items = RSS_Feed[0]
+    RSS_Feed_Count = RSS_Feed[1]
+
+    # User input for number of files to download and make sure user input is clean
+    is_valid = 0
+    while is_valid == 0:
+        How_Many = get_input(RSS_Feed_Count)
+        is_valid = validate_input(How_Many, RSS_Feed_Count)
     else:
-        File_Count = str(How_Many) + " files to - "
-    print("Downloading " + File_Count + local_target_dir)
-    Download_Files(local_target_dir, RSS_Feed_Items, How_Many)
+        if int(How_Many) == 0:
+            File_Count = "All files to - "
+        elif int(How_Many) == 1:
+            File_Count = str(How_Many) + " file to - "
+        else:
+            File_Count = str(How_Many) + " files to - "
+        print("Downloading " + File_Count + local_target_dir)
+        Download_Files(local_target_dir, RSS_Feed_Items, How_Many)
 
 # End Of Line
