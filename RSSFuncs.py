@@ -1,6 +1,3 @@
-# NOTE: This was moved to RSSfuncs and is deprecaiated
-
-
 """
 Author : 
 Contact: thejdunbar+github@gmail.com
