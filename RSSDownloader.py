@@ -20,15 +20,48 @@ import wget
 import feedparser
 import glob
 import os
+from pathlib import Path
+from os import makedirs
 
 # RSS Feed to download and local location to download files too
 # RSS_Target = <https link to the RSS feed> "https://securityinfive.libsyn.com/rss"
 # local_target_dir = <local directory 'C:\foldername\target' format> "C:\Dev\PodcastArchive"
 
-RSS_Target = "https://files.manager-tools.com/files/public/feeds/hall-of-fame.xml"
-local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/Podcasts/Hall-of-fame"
+# ListOfFeeds=["https://www.manager-tools.com/podcasts/basics-rss.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/hall-of-fame.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/the-effective-manager-book.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/hiring.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/one-on-ones.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/feedback.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/coaching.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/delegation.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/new-manager.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/management-basics.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/project-management.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/politics.xml"
+# ,"https://files.manager-tools.com/files/public/feeds/presentations.xml"]
+# ListOfFeeds=["https://files.manager-tools.com/files/public/feeds/politics.xml"]
+ListOfFeeds = [
+    "https://files.manager-tools.com/files/public/feeds/politics.xml",
+    "https://files.manager-tools.com/files/public/feeds/presentations.xml",
+]
+
+
+RSS_Target = "https://www.manager-tools.com/podcasts/basics-rss.xml"
+
+# local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/Podcasts/Hall-of-fame"
 # RSS_Target = "https://files.manager-tools.com/files/private/feeds/fada28dae9/executive-tools-podcasts.xml"
 # local_target_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/ExecutiveTools"
+
+
+# tempcode
+
+parent_dir = "/home/blitzaction/SynologyDrive/-=LEARN=-/2021RELEARN/Podcasts/"
+folder = Path((RSS_Target[RSS_Target.find("feeds/") + 6 : 99])).stem.capitalize()
+local_target_dir = os.path.join(parent_dir, folder)
+if not os.path.exists(local_target_dir):
+    os.makedirs(local_target_dir)
+    print("Directory '% s' created" % folder)
 
 
 def get_input(rss_len):
@@ -45,11 +78,22 @@ def get_input(rss_len):
         rss_episodes_text = "episodes"
 
     # Prompt for how many files to download
-    print("There " + rss_text + " " + str(rss_len) + " " + rss_episodes_text + " in this feed.")
+    print(
+        "There "
+        + rss_text
+        + " "
+        + str(rss_len)
+        + " "
+        + rss_episodes_text
+        + " in this feed."
+    )
     print("RSS feeds are ordered from most recent entries first, descending order in.")
-    print("If an episode exists in the target directory the download will skip that file.")
+    print(
+        "If an episode exists in the target directory the download will skip that file."
+    )
     print("-------------------------------")
-    how_many_downloaded = input("How many recent episodes to download? Enter 0 for them all. - ")
+    how_many_downloaded = "0"
+    # how_many_downloaded = input("How many recent episodes to download? Enter 0 for them all. - ")
     print("-------------------------------")
 
     return how_many_downloaded
@@ -72,15 +116,17 @@ def validate_input(how_many_num, rss_len):
     # Return a 1 or 0, guess which means what.
     return validated
 
+
 def Get_Feed(rss_to_load):
     # Load the RSS Feed
     print("Getting feed - " + rss_to_load + " please wait...")
     rss_feed_load = feedparser.parse(rss_to_load)
     rss_length = len(rss_feed_load.entries)
     print("Feed loaded.")
-    
+
     # Pass back a list
     return rss_feed_load, rss_length
+
 
 def Download_Files(target_dir, rss_feed, how_many_to_get):
     # Initialize the download counter
@@ -98,14 +144,16 @@ def Download_Files(target_dir, rss_feed, how_many_to_get):
         # second entry for the mp3 link
         # .links has the download in the second entry
         mp3_link = entry_links[1]
-        mp3_href = mp3_link['href']
+        mp3_href = mp3_link["href"]
 
         # Strip out the mp3 file from the download URL for directory search
         # Break out the / directories from the URL
-        temp_mp3_link = mp3_href.split('/')
+        temp_mp3_link = mp3_href.split("/")
         # Get the count of the URL items, then get position of the mp3 file,
         # the mp3 file will be the last entry http://example.com/epsiode/whatever/something/episode_111.mp3
-        temp_mp3_link_last = len(temp_mp3_link) - 1    # minus one because of the array numbering
+        temp_mp3_link_last = (
+            len(temp_mp3_link) - 1
+        )  # minus one because of the array numbering
         # MP3 filename
         temp_mp3_link = temp_mp3_link[temp_mp3_link_last]
 
@@ -125,7 +173,7 @@ def Download_Files(target_dir, rss_feed, how_many_to_get):
             print("File Exists - SKIPPING DOWNLOAD - " + temp_mp3_link)
         else:
             print("Downloading - " + str(temp_mp3_link))
-            wget.download(mp3_link['href'], target_dir)
+            wget.download(mp3_link["href"], target_dir)
 
         # Iterate the entered count, break out when hit the entered file count
         # If How_Many is 0 the For loop will run to the end.
@@ -140,7 +188,8 @@ def Download_Files(target_dir, rss_feed, how_many_to_get):
     # Kick out Complete message when done with all episodes when input is 0
     if int(how_many_to_get) == 0:
         print("--- DOWNLOAD COMPLETE ---")
-        
+
+
 # -----------------------------------------------------------------------
 
 # Get Started, Load the RSS and break out the feed and file count from the feed
@@ -162,5 +211,11 @@ else:
         File_Count = str(How_Many) + " files to - "
     print("Downloading " + File_Count + local_target_dir)
     Download_Files(local_target_dir, RSS_Feed_Items, How_Many)
+
+# beep at the end
+import os
+
+beep = lambda x: os.system("echo -n '\a';sleep 0.2;" * x)
+beep(3)
 
 # End Of Line
